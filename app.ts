@@ -75,4 +75,10 @@ app.use(express.static("public"));
 
 const port = process.env.PORT || 3000;
 
-server.listen(port, () => console.log("listening on port ", port));
+server.listen(
+  {
+    host: "0.0.0.0",
+    port,
+  },
+  () => console.log("listening on host 0.0.0.0 and port ", port)
+);
