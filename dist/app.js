@@ -75,4 +75,8 @@ io.on("connection", function (socket) {
     });
 });
 app.use(express_1.default.static("public"));
-server.listen(3000, function () { return console.log("listening on port 3000"); });
+var port = process.env.PORT || 3000;
+server.listen({
+    host: "0.0.0.0",
+    port: port,
+}, function () { return console.log("listening on host 0.0.0.0 and port ", port); });
