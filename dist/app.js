@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var http_1 = __importDefault(require("http"));
 var socket_io_1 = require("socket.io");
-var Bew = __importStar(require("../types"));
+var Bew = __importStar(require("./types"));
 var meta = {
     src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     timeStamp: 60,

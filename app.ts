@@ -2,7 +2,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 
-import * as Bew from "../types";
+import * as Bew from "./types";
 
 const meta: Bew.IVideoMeta = {
   src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
