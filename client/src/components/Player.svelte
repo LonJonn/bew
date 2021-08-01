@@ -32,12 +32,20 @@
   // On Load Video
   socket.on(
     Bew.EAction.LOAD_VIDEO,
-    function loadVideoSrc(data: Bew.IVideoMeta) {
-      if (data.src.includes(".mp4")) {
-        video.src = data.src;
+    function loadVideoSrc(payload: Bew.IVideoMeta) {
+      if (payload.src.includes(".mp4")) {
+        video.src = payload.src;
       } else {
-        hls.loadSource(data.src);
+        hls.loadSource(payload.src);
         hls.attachMedia(video);
+      }
+
+      video.currentTime = payload.timeStamp;
+
+      if (payload.state === "PLAYING") {
+        video.play();
+      } else {
+        video.pause();
       }
     }
   );
@@ -59,8 +67,6 @@
     Bew.EAction.SEEK,
     function updateVideoTime(payload: Bew.ISeekAction) {
       video.currentTime = payload.timeStamp;
-
-      active = true;
     }
   );
 

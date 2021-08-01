@@ -28,10 +28,6 @@ io.on("connection", function (socket) {
   /* ##### New Connection ##### */
 
   socket.emit(Bew.EAction.LOAD_VIDEO, meta as Bew.ILoadVideoAction);
-  socket.emit(Bew.EAction.SEEK, meta as Bew.ISeekAction);
-  socket.emit(Bew.EAction.UPDATE_STATE, {
-    state: meta.state,
-  } as Bew.IUpdateStateAction);
 
   /* ##### On Set Video ##### */
 
@@ -44,7 +40,7 @@ io.on("connection", function (socket) {
       meta.state = "PAUSED";
 
       // Reload video for all users
-      socket.emit(Bew.EAction.LOAD_VIDEO, meta);
+      io.emit(Bew.EAction.LOAD_VIDEO, meta);
     }
   );
 
