@@ -75,6 +75,8 @@
   function changeVideo(event: Event) {
     event.preventDefault();
 
+    if (!window.location.search.includes("can_control")) return;
+
     if (!active) return;
     socket.emit(Bew.EAction.SET_VIDEO, { src } as Bew.ISetVideoAction);
 
@@ -82,11 +84,15 @@
   }
 
   function updateState(state: Bew.IUpdateStateAction["state"]) {
+    if (!window.location.search.includes("can_control")) return;
+
     if (!active) return;
     socket.emit(Bew.EAction.UPDATE_STATE, { state } as Bew.IUpdateStateAction);
   }
 
   function handleSeek() {
+    if (!window.location.search.includes("can_control")) return;
+
     if (!active) return;
     socket.emit(Bew.EAction.SEEK, {
       timeStamp: video.currentTime,
@@ -106,10 +112,12 @@
     <track kind="captions" />
   </video>
 
-  <form bind:this={form} on:submit={changeVideo}>
-    <input name="src" bind:value={src} />
-    <button type="submit">Change Video</button>
-  </form>
+  {#if window.location.search.includes("can_control")}
+    <form bind:this={form} on:submit={changeVideo}>
+      <input name="src" bind:value={src} />
+      <button type="submit">Change Video</button>
+    </form>
+  {/if}
 </div>
 
 <style scoped>
