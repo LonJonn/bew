@@ -4,13 +4,15 @@
 
   import * as Bew from "../../../types";
 
+  let CAN_CONTROL = window.location.search.includes("can_control");
+
   let video: HTMLVideoElement;
   let form: HTMLFormElement;
 
   let src: string;
   let active: boolean = true;
 
-  const socket = io("http://localhost:3000");
+  const socket = io("");
   const hls = new Hls();
 
   socket.onAny(() => {
@@ -75,25 +77,19 @@
   function changeVideo(event: Event) {
     event.preventDefault();
 
-    if (!window.location.search.includes("can_control")) return;
-
-    if (!active) return;
+    if (!active || !CAN_CONTROL) return;
     socket.emit(Bew.EAction.SET_VIDEO, { src } as Bew.ISetVideoAction);
 
     src = "";
   }
 
   function updateState(state: Bew.IUpdateStateAction["state"]) {
-    if (!window.location.search.includes("can_control")) return;
-
-    if (!active) return;
+    if (!active || !CAN_CONTROL) return;
     socket.emit(Bew.EAction.UPDATE_STATE, { state } as Bew.IUpdateStateAction);
   }
 
   function handleSeek() {
-    if (!window.location.search.includes("can_control")) return;
-
-    if (!active) return;
+    if (!active || !CAN_CONTROL) return;
     socket.emit(Bew.EAction.SEEK, {
       timeStamp: video.currentTime,
     } as Bew.ISeekAction);
@@ -112,11 +108,13 @@
     <track kind="captions" />
   </video>
 
-  {#if window.location.search.includes("can_control")}
+  {#if CAN_CONTROL}
     <form bind:this={form} on:submit={changeVideo}>
       <input name="src" bind:value={src} />
       <button type="submit">Change Video</button>
     </form>
+
+    <button on:click={handleSeek}>Sync</button>
   {/if}
 </div>
 

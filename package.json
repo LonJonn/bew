@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon app.ts",
-    "build": ""
+    "build": "tsc && cd client && npm run build"
   },
   "author": "",
   "license": "ISC",
