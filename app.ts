@@ -6,6 +6,8 @@ import * as Bew from "./types";
 
 const meta: Bew.IVideoMeta = {
   src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+  captions:
+    "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt",
   timeStamp: 60,
   state: "PLAYING",
 };
@@ -14,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "*",
   },
 });
 
@@ -29,6 +31,10 @@ io.on("connection", function (socket) {
 
   socket.emit(Bew.EAction.LOAD_VIDEO, meta as Bew.ILoadVideoAction);
 
+  socket.on(Bew.EAction.PERSON_JOINED, function sendMessage(name) {
+    socket.broadcast.emit(Bew.EAction.PERSON_JOINED, name);
+  });
+
   /* ##### On Set Video ##### */
 
   socket.on(
@@ -36,6 +42,7 @@ io.on("connection", function (socket) {
     function updateMetaSrc(payload: Bew.ISetVideoAction) {
       // Set new meta from update event
       meta.src = payload.src;
+      meta.captions = payload.captions;
       meta.timeStamp = 0;
       meta.state = "PAUSED";
 

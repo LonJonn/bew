@@ -8,27 +8,50 @@
   {#if interacted}
     <Player />
   {:else}
-    <button class="join-btn" on:click={() => (interacted = true)}>Join</button>
+    <h1>
+      Welcome to...
+      <br />
+      <span class="neon">Lonny's Cinema</span><span class="pop">🍿</span>
+    </h1>
+
+    <img src="michael.gif" alt="michael eating corn that has been popped" />
+
+    <button class="btn" on:click={() => (interacted = true)}>Join 🤩</button>
   {/if}
 </main>
 
-<style scoped>
+<style>
   main {
     display: flex;
+    flex-direction: column;
+    gap: 3em;
     justify-content: center;
+    align-items: center;
     padding: 2rem;
   }
 
-  .join-btn {
-    border: none;
-    border-radius: 10px;
-    padding: 1rem 3rem;
-    font-size: large;
-    background-color: #fefefe;
-    cursor: pointer;
+  h1 {
+    margin-top: 4rem;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 500;
   }
 
-  .join-btn:hover {
-    background-color: #f0f0f0;
+  .neon {
+    font-family: "Courgette", cursive;
+    font-weight: bold;
+    font-size: 4rem;
+    text-shadow: 0 0 15px #fff, 0 0 20px #e74242, 0 0 30px #e74242,
+      0 0 40px #e74242, 0 0 55px #e74242, 0 0 75px #e74242;
+  }
+
+  .pop {
+    margin-left: 1rem;
+    font-size: 4.3rem;
+  }
+
+  img {
+    width: 40%;
+    border-radius: 3px;
   }
 </style>

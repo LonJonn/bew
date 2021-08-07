@@ -1,19 +1,53 @@
 <script lang="ts">
   import { io } from "socket.io-client";
   import Hls from "hls.js";
+  import Plyr from "plyr";
 
   import * as Bew from "../../../types";
+  import { onMount } from "svelte";
 
   let CAN_CONTROL = window.location.search.includes("can_control");
 
+  let name = prompt("Who this? 🤨");
+
   let video: HTMLVideoElement;
   let form: HTMLFormElement;
+  let chat: HTMLDivElement;
 
   let src: string;
+  let captions: string;
   let active: boolean = true;
 
-  const socket = io("");
+  const socket = io(import.meta.env.DEV ? "http://localhost:3000" : "");
   const hls = new Hls();
+
+  socket.on("connect", () => {
+    socket.emit(Bew.EAction.PERSON_JOINED, name);
+  });
+
+  let player: Plyr;
+  onMount(() => {
+    player = new Plyr(video, {
+      captions: { active: true, update: true },
+      clickToPlay: CAN_CONTROL,
+      invertTime: false,
+      controls: [
+        ...(CAN_CONTROL ? ["play-large", "play", "progress"] : []),
+        "current-time",
+        "mute",
+        "volume",
+        "captions",
+        "settings",
+        "pip",
+        "airplay",
+        "fullscreen",
+      ],
+    });
+    (window as any).player = player;
+  });
+
+  (window as any).Plyr = Plyr;
+  (window as any).hls = hls;
 
   socket.onAny(() => {
     active = false;
@@ -31,6 +65,13 @@
   // Log any message
   socket.onAny((...msg) => console.log("Received:", msg));
 
+  socket.on(Bew.EAction.PERSON_JOINED, function writeMessage(name) {
+    const newMessage = document.createElement("p");
+    newMessage.innerText = `${name} joined!`;
+
+    chat.appendChild(newMessage);
+  });
+
   // On Load Video
   socket.on(
     Bew.EAction.LOAD_VIDEO,
@@ -45,10 +86,12 @@
       video.currentTime = payload.timeStamp;
 
       if (payload.state === "PLAYING") {
-        video.play();
+        player.play();
       } else {
-        video.pause();
+        player.pause();
       }
+
+      video.querySelector("track").src = payload.captions;
     }
   );
 
@@ -57,9 +100,9 @@
     Bew.EAction.UPDATE_STATE,
     function updateVideoState(payload: Bew.IUpdateStateAction) {
       if (payload.state === "PLAYING") {
-        video.play();
+        player.play();
       } else {
-        video.pause();
+        player.pause();
       }
     }
   );
@@ -68,7 +111,7 @@
   socket.on(
     Bew.EAction.SEEK,
     function updateVideoTime(payload: Bew.ISeekAction) {
-      video.currentTime = payload.timeStamp;
+      player.currentTime = payload.timeStamp;
     }
   );
 
@@ -78,9 +121,13 @@
     event.preventDefault();
 
     if (!active || !CAN_CONTROL) return;
-    socket.emit(Bew.EAction.SET_VIDEO, { src } as Bew.ISetVideoAction);
+    socket.emit(Bew.EAction.SET_VIDEO, {
+      src,
+      captions,
+    } as Bew.ISetVideoAction);
 
     src = "";
+    captions = "";
   }
 
   function updateState(state: Bew.IUpdateStateAction["state"]) {
@@ -97,6 +144,7 @@
 </script>
 
 <div class="player">
+  <!-- svelte-ignore a11y-media-has-caption -->
   <video
     height="400"
     controls
@@ -104,18 +152,25 @@
     on:play={() => updateState("PLAYING")}
     on:pause={() => updateState("PAUSED")}
     on:seeking={() => handleSeek()}
+    crossorigin="anonymous"
+    playsinline
   >
-    <track kind="captions" />
+    <track label="english" kind="captions" src="" srclang="en" default />
   </video>
 
   {#if CAN_CONTROL}
-    <form bind:this={form} on:submit={changeVideo}>
-      <input name="src" bind:value={src} />
-      <button type="submit">Change Video</button>
-    </form>
+    <div class="below">
+      <form bind:this={form} on:submit={changeVideo}>
+        <input name="src" placeholder="Video" bind:value={src} />
+        <input name="src" placeholder="Captions" bind:value={captions} />
+        <button type="submit" class="btn">Change Video</button>
+      </form>
 
-    <button on:click={handleSeek}>Sync</button>
+      <button class="btn" on:click={handleSeek}>Sync</button>
+    </div>
   {/if}
+
+  <div bind:this={chat} class="chat" />
 </div>
 
 <style scoped>
@@ -126,5 +181,36 @@
     gap: 2rem;
 
     padding: 2rem;
+  }
+
+  .below {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  form {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  input {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 0 0.5rem 1rem;
+    font-size: medium;
+    background-color: #fafafa;
+  }
+
+  .chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  :global(.chat > p) {
+    text-transform: capitalize;
+    font-size: medium;
   }
 </style>

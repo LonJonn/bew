@@ -7,4 +7,5 @@ var EAction;
     EAction["LOAD_VIDEO"] = "LOAD_VIDEO";
     EAction["UPDATE_STATE"] = "UPDATE_STATE";
     EAction["SEEK"] = "SEEK";
+    EAction["PERSON_JOINED"] = "PERSON_JOINED";
 })(EAction = exports.EAction || (exports.EAction = {}));

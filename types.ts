@@ -3,17 +3,20 @@ export enum EAction {
   LOAD_VIDEO = "LOAD_VIDEO",
   UPDATE_STATE = "UPDATE_STATE",
   SEEK = "SEEK",
+
+  PERSON_JOINED = "PERSON_JOINED",
 }
 
 export interface IVideoMeta {
   src: string;
+  captions: string;
   timeStamp: number;
   state: "PLAYING" | "PAUSED";
 }
 
-export type ILoadVideoAction = Pick<IVideoMeta, "src" | "timeStamp">;
+export type ILoadVideoAction = IVideoMeta;
 
-export type ISetVideoAction = Pick<IVideoMeta, "src">;
+export type ISetVideoAction = Pick<IVideoMeta, "src" | "captions">;
 
 export type IUpdateStateAction = Pick<IVideoMeta, "state">;
 

@@ -28,6 +28,7 @@ var socket_io_1 = require("socket.io");
 var Bew = __importStar(require("./types"));
 var meta = {
     src: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    captions: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt",
     timeStamp: 60,
     state: "PLAYING",
 };
@@ -35,7 +36,7 @@ var app = express_1.default();
 var server = http_1.default.createServer(app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:3001",
+        origin: "*",
     },
 });
 io.on("connection", function (socket) {
@@ -50,10 +51,14 @@ io.on("connection", function (socket) {
     });
     /* ##### New Connection ##### */
     socket.emit(Bew.EAction.LOAD_VIDEO, meta);
+    socket.on(Bew.EAction.PERSON_JOINED, function sendMessage(name) {
+        socket.broadcast.emit(Bew.EAction.PERSON_JOINED, name);
+    });
     /* ##### On Set Video ##### */
     socket.on(Bew.EAction.SET_VIDEO, function updateMetaSrc(payload) {
         // Set new meta from update event
         meta.src = payload.src;
+        meta.captions = payload.captions;
         meta.timeStamp = 0;
         meta.state = "PAUSED";
         // Reload video for all users
