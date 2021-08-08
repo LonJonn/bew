@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE DRIP LORD</title>
+  </head>
+  <body>
+    <audio controls>
+      <source src="Voldemort Laughing.mp3" type="audio/mpeg" />
+    </audio>
+
+    <div class="grid">
+      <h1>The DRIP Lord Mural 🔥🥵😣</h1>
+
+      <img src="volde_big.png" alt="big volde" />
+
+      <img src="volde_got_drip.jpg" alt="drip volde" />
+      <img src="volde_1.png" alt="volde stare" />
+
+      <img src="volde_cute.webp" alt="cute volde" />
+      <img src="volde_cute_2.jpg" alt="cute volde 2" />
+    </div>
+  </body>
+
+  <style>
+    html {
+      background-color: #2b2b2b;
+      color: white;
+      font-family: cursive;
+    }
+
+    audio {
+      display: none;
+    }
+
+    h1 {
+      text-align: center;
+      grid-column: span 2 / span 2;
+    }
+
+    .grid {
+      margin: 0 auto;
+      width: 90vw;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-items: stretch;
+      align-items: stretch;
+      padding-bottom: 2rem;
+    }
+
+    img {
+      width: auto;
+      max-height: 450px;
+    }
+
+    img[src="volde_big.png"] {
+      grid-column: span 2 / span 2;
+    }
+  </style>
+
+  <script>
+    const laugh = document.querySelector("audio");
+    laugh.play();
+  </script>
+</html>

@@ -31,9 +31,9 @@ html {
   background-color: #d43939;
   transform: scale(1.05);
 
-  box-shadow: rgba(149, 25, 32, 0.4) 4px 4px 20px,
-    rgba(149, 25, 32, 0.4) 4px -4px 20px, rgba(149, 25, 32, 0.4) -4px 4px 20px,
-    rgba(149, 25, 32, 0.4) -4px -4px 20px;
+  box-shadow: rgba(231 66 66 /40%) 4px 4px 20px,
+    rgba(231 66 66 /40%) 4px -4px 20px, rgba(231 66 66 /40%) -4px 4px 20px,
+    rgba(231 66 66 /40%) -4px -4px 20px;
 }
 
 .btn:active {
