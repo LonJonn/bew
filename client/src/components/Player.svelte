@@ -30,6 +30,10 @@
     player = new Plyr(video, {
       captions: { active: true, update: true },
       clickToPlay: CAN_CONTROL,
+      keyboard: {
+        global: CAN_CONTROL,
+        focused: CAN_CONTROL,
+      },
       invertTime: false,
       controls: [
         ...(CAN_CONTROL ? ["play-large", "play", "progress"] : []),
