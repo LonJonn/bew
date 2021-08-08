@@ -7,8 +7,11 @@
     <title>THE DRIP LORD</title>
   </head>
   <body>
-    <audio controls>
+    <audio id="laugh">
       <source src="Voldemort Laughing.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="kimi">
+      <source src="CalDRCGCkjVPl28f-1-1.mp4" type="audio/mpeg" />
     </audio>
 
     <div class="grid">
@@ -30,10 +33,10 @@
       color: white;
       font-family: cursive;
     }
-
+    /* 
     audio {
       display: none;
-    }
+    } */
 
     h1 {
       text-align: center;
@@ -61,7 +64,13 @@
   </style>
 
   <script>
-    const laugh = document.querySelector("audio");
+    const laugh = document.querySelector("#laugh");
+    const kimi = document.querySelector("#kimi");
+
     laugh.play();
+
+    setTimeout(() => {
+      kimi.play();
+    }, 3000);
   </script>
 </html>
