@@ -8,6 +8,11 @@
 
   let CAN_CONTROL = window.location.search.includes("can_control");
 
+  // Heartbeat
+  if (CAN_CONTROL) {
+    setInterval(() => fetch("/"), 15 * 60 * 1000);
+  }
+
   let name = prompt("Who this? 🤨");
 
   let video: HTMLVideoElement;
@@ -47,11 +52,7 @@
         "fullscreen",
       ],
     });
-    (window as any).player = player;
   });
-
-  (window as any).Plyr = Plyr;
-  (window as any).hls = hls;
 
   socket.onAny(() => {
     active = false;
@@ -156,7 +157,6 @@
     on:play={() => updateState("PLAYING")}
     on:pause={() => updateState("PAUSED")}
     on:seeking={() => handleSeek()}
-    crossorigin="anonymous"
     playsinline
   >
     <track label="english" kind="captions" src="" srclang="en" default />
