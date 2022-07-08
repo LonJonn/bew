@@ -158,6 +158,7 @@
     on:pause={() => updateState("PAUSED")}
     on:seeking={() => handleSeek()}
     playsinline
+    crossorigin="anonymous"
   >
     <track label="english" kind="captions" src="" srclang="en" default />
   </video>
