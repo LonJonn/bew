@@ -81,7 +81,7 @@
   socket.on(
     Bew.EAction.LOAD_VIDEO,
     function loadVideoSrc(payload: Bew.IVideoMeta) {
-      if (payload.src.includes(".mp4")) {
+      if (payload.src.endsWith(".mp4")) {
         video.src = payload.src;
       } else {
         hls.loadSource(payload.src);
